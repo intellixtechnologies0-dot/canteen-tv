@@ -1,0 +1,343 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for fullscreen dashboard */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Fullscreen layout */
+.fullscreen-dashboard {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Development mode styles */
+.dev-mode {
+  cursor: default !important;
+  overflow: hidden !important;
+  user-select: none !important;
+  pointer-events: auto !important;
+}
+
+.dev-mode .fullscreen-dashboard {
+  height: calc(100vh - 40px); /* Account for debug bar */
+  overflow: hidden;
+}
+
+/* Production mode styles (for TV/kiosk) */
+.production-mode {
+  cursor: none !important;
+  overflow: hidden !important;
+}
+
+.production-mode .fullscreen-dashboard {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.production-mode ::-webkit-scrollbar {
+  display: none;
+}
+
+.production-mode {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fullscreen for production */
+.production-mode body {
+  overflow: hidden;
+}
+
+.production-mode html {
+  overflow: hidden;
+}
+
+/* Ensure no scrollbars anywhere */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: hidden;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Disable all interaction */
+body, html {
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for the main dashboard */
+.fullscreen-dashboard {
+  pointer-events: auto;
+}
+
+/* Development mode - allow cursor and interaction */
+.dev-mode .fullscreen-dashboard {
+  pointer-events: auto;
+  cursor: default;
+}
+
+/* Debug bar styles */
+.debug-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: #1a1a1a;
+  border-top: 1px solid #333333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  z-index: 1000;
+}
+
+.debug-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-connected {
+  background-color: #00ff00;
+}
+
+.status-disconnected {
+  background-color: #ff0000;
+}
+
+.status-pending {
+  background-color: #ffff00;
+}
+
+/* Debug overlay styles */
+.debug-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  z-index: 1000;
+  overflow: auto;
+}
+
+.debug-overlay pre {
+  background-color: #1a1a1a;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.debug-overlay kbd {
+  background-color: #333;
+  color: #00ff00;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+/* Light theme background */
+.light-theme {
+  background-color: #ffffff; /* bg-white */
+  min-height: 100vh;
+  color: black;
+}
+
+/* Token card animations */
+.token-card {
+  transition: all 700ms ease-in-out;
+  transform-origin: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); /* shadow-lg */
+  padding: 1rem; /* p-4 */
+}
+
+.token-card.normal {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.token-card.fade-out {
+  opacity: 0;
+  transform: scale(0.3);
+  animation: fadeOutShrinkAnimation 700ms ease-in-out forwards;
+}
+
+.token-card.scale-in {
+  opacity: 0;
+  transform: scale(0.3);
+  animation: fadeInScaleUpAnimation 700ms ease-in-out forwards;
+}
+
+.token-card.glow-pulse {
+  animation: glowPulseAnimation 2s ease-in-out;
+}
+
+.token-number {
+  font-size: 4rem; /* Smaller for better fit */
+  font-weight: bold;
+  line-height: 1;
+  color: black;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+@media (min-width: 1280px) {
+  .token-number {
+    font-size: 5rem; /* Slightly larger on big screens */
+  }
+}
+
+/* Digital clock */
+.digital-clock {
+  font-family: 'Courier New', monospace;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #059669; /* text-emerald-600 */
+  text-shadow: 0 0 5px rgba(5, 150, 105, 0.3);
+}
+
+/* Bottom clock bar */
+.bottom-clock-bar {
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px; /* Account for debug bar in dev mode */
+}
+
+/* In production mode, remove the margin */
+.production-mode .bottom-clock-bar {
+  margin-bottom: 0;
+}
+
+.bottom-clock {
+  font-family: 'Courier New', monospace;
+  font-size: 1.875rem; /* text-3xl */
+  color: #374151; /* text-gray-700 */
+  font-weight: normal;
+}
+
+/* Scrolling banner */
+.scrolling-banner {
+  background: rgba(255, 255, 255, 0.9);
+  color: #059669; /* text-emerald-600 */
+  padding: 1rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 40px; /* Account for debug bar in dev mode */
+}
+
+/* In production mode, remove the margin */
+.production-mode .scrolling-banner {
+  margin-bottom: 0;
+}
+
+.scrolling-text {
+  display: inline-block;
+  animation: scroll 20s linear infinite;
+}
+
+@keyframes fadeInScaleUpAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  30% {
+    opacity: 0.7;
+    transform: scale(0.8);
+  }
+  70% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOutShrinkAnimation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 0.7;
+    transform: scale(0.8);
+  }
+  70% {
+    opacity: 0.3;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+@keyframes glowPulseAnimation {
+  0% {
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 40px rgba(0, 255, 0, 1), 0 0 60px rgba(0, 255, 0, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
