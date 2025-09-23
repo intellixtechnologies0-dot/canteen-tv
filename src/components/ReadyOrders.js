@@ -60,33 +60,31 @@ const ReadyOrders = () => {
     return () => clearInterval(interval);
   }, [orders]);
 
+  // Always render a 4x3 grid (12 slots). If there are fewer orders, fill with placeholders.
+  const totalSlots = 24; // 6 columns × 4 rows
+  const displayedOrders = Array.from({ length: totalSlots }, (_, i) => orders[i] || null);
+
   return (
-    <div className="w-full h-full flex items-center justify-center overflow-hidden">
-      {/* Token Grid - 4 columns × 3 rows (12 tokens max) */}
-      <div className="grid grid-cols-4 grid-rows-3 gap-4 xl:gap-6 max-w-6xl mx-auto overflow-hidden">
-        {Array.from({ length: 12 }, (_, index) => {
-          const order = orders[index];
+    <div className="w-full h-full p-3 xl:p-4 overflow-hidden">
+      <div className="grid grid-cols-6 grid-rows-4 gap-3 xl:gap-4 h-full w-full">
+        {displayedOrders.map((order, index) => {
           const isFadingOut = order && fadeOutOrders.has(order.id);
           const isScalingIn = order && scaleInOrders.has(order.id);
           const isGlowPulsing = order && glowPulseOrders.has(order.id);
-          
+
           return (
-            <div 
+            <div
               key={order ? order.id : `empty-${index}`}
-              className={`token-card flex items-center justify-center min-h-[120px] transition-all duration-700 ease-in-out ${
-                isFadingOut 
-                  ? 'fade-out' 
-                  : isScalingIn 
-                    ? 'scale-in' 
-                    : 'normal'
+              className={`token-card flex items-center justify-center overflow-hidden transition-all duration-700 ease-in-out ${
+                isFadingOut ? 'fade-out' : isScalingIn ? 'scale-in' : 'normal'
               } ${isGlowPulsing ? 'glow-pulse' : ''}`}
             >
               {order ? (
-                <div className="token-number text-4xl font-bold text-black">
+                <div className="token-number font-bold text-black leading-none whitespace-nowrap select-none text-[clamp(1.75rem,4.2vw,3.5rem)] md:text-[clamp(2rem,3.6vw,4rem)] xl:text-[clamp(2.25rem,3vw,4.25rem)]">
                   {order.tokenNumber}
                 </div>
               ) : (
-                <div className="token-number text-4xl font-bold text-black opacity-30">
+                <div className="token-number font-bold text-black opacity-20 leading-none whitespace-nowrap select-none text-[clamp(1.5rem,3.6vw,3.25rem)]">
                   ---
                 </div>
               )}

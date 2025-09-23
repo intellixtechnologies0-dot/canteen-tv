@@ -15,8 +15,8 @@ class OrderService {
       const { data, error } = await supabase
         .from('orders')
         .select('*')
-        .eq('status', 'ready')
-        .order('ready_at', { ascending: false }); // Newest first
+        .ilike('status', 'ready')
+        .order('id', { ascending: false }); // Newest first by id
 
       if (error) {
         console.error('❌ Supabase error:', error);
@@ -86,9 +86,14 @@ class OrderService {
 
   // Get ready orders (synchronous method for compatibility)
   getReadyOrders() {
+    const toTs = (v) => {
+      if (!v) return 0;
+      const n = typeof v === 'number' ? v : Date.parse(v);
+      return Number.isFinite(n) ? n : 0;
+    };
     return this.orders
-      .filter(order => order.status === 'ready')
-      .sort((a, b) => b.ready_at - a.ready_at);
+      .filter(order => (order.status || '').toLowerCase() === 'ready')
+      .sort((a, b) => toTs(b.ready_at || b.created_at) - toTs(a.ready_at || a.created_at));
   }
 
   // Update orders from Supabase (replaces simulation)
